@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/david/Desktop/Semester 4/corpus-tool/venv/bin/python3.12" "$0" "$@"
-' '''
+#!/Users/lukeshao/corpus-tool/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
