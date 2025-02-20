@@ -5,8 +5,15 @@ body {
     margin: 0;
     padding: 20px;
 }
-h1 { color: #333; }
-nav { margin: 20px 0; }
+
+h1 {
+    color: #333;
+}
+
+nav {
+    margin: 20px 0;
+}
+
 nav a {
     display: inline-block;
     margin: 0 10px;
@@ -17,11 +24,41 @@ nav a {
     border-radius: 4px;
     transition: background-color 0.3s ease;
 }
-nav a:hover { background-color: #45a049; }
+
+nav a:hover {
+    background-color: #45a049;
+}
+
+form {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 textarea, input[type="file"] {
     width: 80%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+input[type="submit"] {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
 }

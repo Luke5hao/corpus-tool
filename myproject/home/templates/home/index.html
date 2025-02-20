@@ -12,10 +12,15 @@
         <a href="#">Home</a>
         <a href="#">Analytics</a>
     </nav>
-    <p>Insert text below:</p>
-    <textarea rows="4" cols="50"></textarea>
-    <p>OR</p>
-    <p>Upload a PDF:</p>
-    <input type="file" accept="application/pdf" />
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>Insert text below:</p>
+        <textarea name="text" rows="4" cols="50"></textarea>
+        <p>OR</p>
+        <p>Upload a PDF:</p>
+        <input type="file" name="pdf_file" accept="application/pdf" />
+        <br/>
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
