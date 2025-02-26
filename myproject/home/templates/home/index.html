@@ -9,7 +9,7 @@
     <h1>Corpus Analysis Tool</h1>
     <nav>
         <a href="#">Home</a>
-        <a href="#">Analytics</a>
+        <a href="{% url 'analytics' %}">Analytics</a>
     </nav>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

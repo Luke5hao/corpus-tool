@@ -9,3 +9,6 @@ def home_view(request):
             TextEntry.objects.create(text=text_input)
             return redirect('home')
     return render(request, 'home/index.html')
+
+def analytics(request):
+    return render(request, 'home/analytics.html')
