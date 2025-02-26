@@ -14,12 +14,17 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <p>Insert text below:</p>
-        <textarea name="text" rows="4" cols="50"></textarea>
+        <textarea id="textBox" rows="4" cols="50" oninput="updateWordCount()"></textarea>
+        <div id="wordCount">Word count: 0</div>
         <p>OR</p>
         <p>Upload a PDF:</p>
         <input type="file" name="pdf_file" accept="application/pdf" />
         <br/>
         <input type="submit" value="Submit">
     </form>
+
+    <!-- Javascript for live word count -->
+    <script src="{% static 'js/app.js' %}"></script>
+
 </body>
 </html>
