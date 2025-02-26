@@ -13,17 +13,25 @@
     </nav>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        <h3>Reflection</h3>
         <p>Insert text below:</p>
-        <textarea id="textBox" rows="4" cols="50" oninput="updateWordCount()"></textarea>
-        <div id="wordCount">Word count: 0</div>
+        <textarea id="textBox" rows="10" cols="50" oninput="updateWordCount()"></textarea>
+        <div id="wordCount">Word count (minimum 200 words): 0</div>
         <p>OR</p>
         <p>Upload a PDF:</p>
         <input type="file" name="pdf_file" accept="application/pdf" />
         <br/>
-        <input type="submit" value="Submit">
+
+        <h3>Worklog</h3>
+        <!-- Need to connect to database -->
+        <p>Insert document link below:</p>
+        <textarea id="textBox" rows="4" cols="50"></textarea>
+        <br/>
+
+        <input id="submitButton" type="submit" value="Submit">
     </form>
 
-    <!-- Javascript for live word count -->
+    <!-- Word Count JS -->
     <script src="{% static 'js/app.js' %}"></script>
 
 </body>
