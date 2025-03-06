@@ -1,27 +1,18 @@
+{% extends 'home/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Corpus Analysis Tool</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
-    <h1>Corpus Analysis Tool</h1>
-    <nav>
-        <a href="#">Home</a>
-        <a href="{% url 'analytics' %}">Analytics</a>
-    </nav>
+
+{% block content %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <h3>Worklog</h3>
         <!-- Need to connect to database -->
         <p>Insert document link below:</p>
-        <textarea id="textBox" rows="1" cols="50"></textarea>
+        <textarea name="text" id="textBox" rows="1" cols="50"></textarea>
         <br/>
 
         <h3>Reflection</h3>
         <p>Insert text below:</p>
-        <textarea id="textBox" rows="10" cols="50" oninput="updateWordCount()"></textarea>
+        <textarea name="reflection" id="textBox" rows="10" cols="50" oninput="updateWordCount()"></textarea>
         <div id="wordCount">Word count (minimum 200 words): 0</div>
         <p>OR</p>
         <p>Upload a PDF:</p>
@@ -30,9 +21,4 @@
 
         <input id="submitButton" type="submit" value="Submit">
     </form>
-
-    <!-- Word Count JS -->
-    <script src="{% static 'js/app.js' %}"></script>
-
-</body>
-</html>
+{% endblock %}
