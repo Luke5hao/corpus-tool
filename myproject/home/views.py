@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
 from .models import TextEntry
 from .forms import UserRegistrationForm
 
+@login_required
 def home_view(request):
     if request.method == 'POST':
-        print("POST data received:", request.POST)  # Debugging line
         text_input = request.POST.get('text', '')
-        if text_input:
-            TextEntry.objects.create(text=text_input)
+        reflection_text = request.POST.get('reflection', '')
+        
+        if reflection_text:
+            TextEntry.objects.create(text=reflection_text, user=request.user)
             return redirect('home')
     return render(request, 'home/index.html')
 
