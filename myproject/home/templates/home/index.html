@@ -2,23 +2,46 @@
 {% load static %}
 
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <h3>Worklog</h3>
-        <!-- Need to connect to database -->
-        <p>Insert document link below:</p>
-        <textarea name="text" id="textBox" rows="1" cols="50"></textarea>
-        <br/>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <section class="card mt-4">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Worklog and Reflection</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="text" class="form-label">Worklog Link:</label>
+                            <textarea name="text" id="textBox" rows="1" class="form-control" placeholder="Enter document link"></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="reflection" class="form-label">Either paste your reflection below, or upload a PDF:</label>
+                            <textarea name="reflection" id="reflectionBox" rows="8" class="form-control" placeholder="Paste your reflection here" oninput="updateWordCount()"></textarea>
+                            <small id="wordCount" class="form-text text-muted">Word count (minimum 200 words): 0</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="pdf_file" class="form-label">Upload PDF:</label>
+                            <input type="file" name="pdf_file" accept="application/pdf" class="form-control">
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
 
-        <h3>Reflection</h3>
-        <p>Insert text below:</p>
-        <textarea name="reflection" id="textBox" rows="10" cols="50" oninput="updateWordCount()"></textarea>
-        <div id="wordCount">Word count (minimum 200 words): 0</div>
-        <p>OR</p>
-        <p>Upload a PDF:</p>
-        <input type="file" name="pdf_file" accept="application/pdf" />
-        <br/>
-
-        <input id="submitButton" type="submit" value="Submit">
-    </form>
+<script>
+    function updateWordCount() {
+        const reflectionText = document.getElementById('reflectionBox').value;
+        const words = reflectionText.trim().split(/\s+/).length;
+        document.getElementById('wordCount').innerText = `Word count (minimum 200 words): ${words}`;
+    }
+</script>
 {% endblock %}
