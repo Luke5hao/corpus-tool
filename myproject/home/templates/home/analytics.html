@@ -2,31 +2,49 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="mb-4">Word Frequency Analysis</h2>
-    
-    {% if word_frequencies %}
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead class="thead-light">
-                        <tr>
-                            <th scope="col">Word</th>
-                            <th scope="col">Frequency</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for word, count in word_frequencies.items %}
-                        <tr>
-                            <td>{{ word }}</td>
-                            <td>{{ count }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2 class="mb-4">Word Frequency Analysis</h2>
+            
+            {% if word_frequencies %}
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Word</th>
+                                    <th scope="col">Frequency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for word, count in word_frequencies.items %}
+                                <tr>
+                                    <td>{{ word }}</td>
+                                    <td>{{ count }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No reflection data available yet.</p>
+            {% endif %}
         </div>
-    {% else %}
-        <p class="text-muted">No reflection data available yet.</p>
-    {% endif %}
+
+        <div class="col-md-6">
+            <h2 class="mb-4">Keyness Analysis</h2>
+            
+            {% if keyness_table %}
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        {{ keyness_table|safe }}
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted">No data available to compute keyness.</p>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
