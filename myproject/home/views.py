@@ -4,6 +4,9 @@ from django.contrib.auth import login
 from django.contrib import messages
 from .models import TextEntry
 from .forms import UserRegistrationForm
+from collections import Counter
+import re
+from .text_processing import tokenize_and_clean
 
 @login_required
 def home_view(request):
@@ -13,11 +16,22 @@ def home_view(request):
         
         if reflection_text:
             TextEntry.objects.create(text=reflection_text, user=request.user)
-            return redirect('home')
+
+            processed_text = tokenize_and_clean(reflection_text)
+            words = processed_text.split()  # Split processed text into words
+            word_frequencies = dict(Counter(words))
+            word_frequencies = dict(sorted(word_frequencies.items(), 
+                            key=lambda x: (-x[1], x[0])))
+        
+            request.session['word_frequencies'] = word_frequencies
+            return redirect('analytics')
     return render(request, 'home/index.html')
 
 def analytics(request):
-    return render(request, 'home/analytics.html')
+    word_frequencies = request.session.get('word_frequencies', {})
+    return render(request, 'home/analytics.html', {
+        'word_frequencies': word_frequencies
+    })
 
 def register(request):
     if request.method == 'POST':
