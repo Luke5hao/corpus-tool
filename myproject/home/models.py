@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from .text_processing import tokenize_and_clean
 
 class TextEntry(models.Model):
-    text = models.TextField()  # Original text
+    text = models.TextField()  # Reflection
+    worklog = models.TextField()  # Worklog
+
     processed_text = models.TextField(blank=True)  # Processed/cleaned text
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -14,7 +14,7 @@ import pandas as pd
 @login_required
 def home_view(request):
     if request.method == 'POST':
-        text_input = request.POST.get('text', '')
+        worklog_link= request.POST.get('worklog', '')
         reflection_text = request.POST.get('reflection', '')
         
         if reflection_text:
@@ -24,8 +24,9 @@ def home_view(request):
             # Create database entry with the current reflection and capture the instance
             current_entry = TextEntry.objects.create(
                 text=reflection_text, 
+                worklog=worklog_link,
                 user=request.user,
-                processed_text=processed_text  # Assuming you have this field
+                processed_text=processed_text
             )
 
             # Generate word frequencies from the current submission (target)
