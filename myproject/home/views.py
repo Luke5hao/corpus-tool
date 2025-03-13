@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
 from django.contrib import messages
-from .models import TextEntry
+from .models import TextEntry, UserProfile
 from .forms import UserRegistrationForm
 from collections import Counter
 import re
@@ -14,7 +14,7 @@ import pandas as pd
 @login_required
 def home_view(request):
     if request.method == 'POST':
-        worklog_link= request.POST.get('worklog', '')
+        worklog_link = request.POST.get('worklog', '')
         reflection_text = request.POST.get('reflection', '')
         
         if reflection_text:
@@ -74,6 +74,11 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # Create UserProfile with class ID
+            UserProfile.objects.create(
+                user=user,
+                class_id=form.cleaned_data['class_id']
+            )
             login(request, user)
             messages.success(request, "Registration successful.")
             return redirect('home')

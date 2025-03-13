@@ -1,50 +1,83 @@
 {% extends 'home/base.html' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h2 class="mb-4">Word Frequency Analysis</h2>
-            
-            {% if word_frequencies %}
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <table class="table table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Word</th>
-                                    <th scope="col">Frequency</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for word, count in word_frequencies.items %}
-                                <tr>
-                                    <td>{{ word }}</td>
-                                    <td>{{ count }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+<div class="container py-5">
+    <!-- Comparison Selector Section -->
+    <div class="row mb-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-body">
+                    <form method="GET" class="mb-0">
+                        <div class="form-group mb-0">
+                            <label for="compareTo" class="form-label fw-bold mb-2">Comparing to:</label>
+                            <select class="form-select form-select-lg shadow-sm" id="compareTo" name="compare_to" onchange="this.form.submit()">
+                                <option value="class" {% if compare_to == 'class' %}selected{% endif %}>👥 Users in my class</option>
+                                <option value="previous" {% if compare_to == 'previous' %}selected{% endif %}>📝 My previous reflections</option>
+                                <option value="all" {% if compare_to == 'all' %}selected{% endif %}>🌐 All users</option>
+                                <option value="michigan" {% if compare_to == 'michigan' %}selected{% endif %}>🎓 Michigan Engineering Corpus</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
-            {% else %}
-                <p class="text-muted">No reflection data available yet.</p>
-            {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Cards -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card shadow border-0 rounded-lg h-100">
+                <div class="card-header bg-white py-3">
+                    <h2 class="card-title h5 mb-0 fw-bold">Word Frequency Analysis</h2>
+                </div>
+                <div class="card-body position-relative">
+                    {% if word_frequencies %}
+                        <div class="analysis-content">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" class="fw-bold">Word</th>
+                                        <th scope="col" class="fw-bold">Frequency</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for word, count in word_frequencies.items %}
+                                    <tr>
+                                        <td>{{ word }}</td>
+                                        <td><span class="badge bg-primary rounded-pill">{{ count }}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-chart-bar fa-3x mb-3"></i>
+                            <p class="mb-0">No reflection data available yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <h2 class="mb-4">Keyness Analysis</h2>
-            
-            {% if keyness_table %}
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        {{ keyness_table|safe }}
-                    </div>
+            <div class="card shadow border-0 rounded-lg h-100">
+                <div class="card-header bg-white py-3">
+                    <h2 class="card-title h5 mb-0 fw-bold">Keyness Analysis</h2>
                 </div>
-            {% else %}
-                <p class="text-muted">No data available to compute keyness.</p>
-            {% endif %}
+                <div class="card-body position-relative">
+                    {% if keyness_table %}
+                        <div class="analysis-content">
+                            {{ keyness_table|safe }}
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-calculator fa-3x mb-3"></i>
+                            <p class="mb-0">No reflection data available yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
