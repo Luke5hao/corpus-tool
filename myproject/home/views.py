@@ -7,9 +7,8 @@ from .forms import UserRegistrationForm
 from collections import Counter
 import re
 from .text_processing import tokenize_and_clean
-import numpy as np
-from scipy import stats
-import pandas as pd
+from .text_processing import compute_keyness
+from .analysis import perform_analysis
 
 @login_required
 def home_view(request):
@@ -53,18 +52,24 @@ def home_view(request):
 
 @login_required
 def analytics(request):
+    compare_to = request.GET.get('compare_to', 'reference')
+
     target_frequencies = request.session.get('target_frequencies', {})
-    reference_frequencies = request.session.get('reference_frequencies', {})
     target_size = request.session.get('target_size', 0)
+    
+    reference_frequencies = request.session.get('reference_frequencies', {})
     reference_size = request.session.get('reference_size', 0)
 
-    if target_frequencies and reference_frequencies:
-        keyness_df = compute_keyness(target_frequencies, reference_frequencies, target_size, reference_size)
-        keyness_table = keyness_df.to_html(index=False)
-    else:
-        keyness_table = "<p>No data available to compute keyness.</p>"
+    target_frequencies, keyness_table = perform_analysis(compare_to, request, request.user)
+
+    # if target_frequencies and reference_frequencies:
+    #     keyness_df = compute_keyness(target_frequencies, reference_frequencies, target_size, reference_size)
+    #     keyness_table = keyness_df.to_html(index=False)
+    # else:
+    #     keyness_table = "<p>No data available to compute keyness.</p>"
 
     return render(request, 'home/analytics.html', {
+        'compare_to': compare_to,
         'word_frequencies': target_frequencies,
         'keyness_table': keyness_table
     })
@@ -87,48 +92,3 @@ def register(request):
     else:
         form = UserRegistrationForm()
     return render(request, 'home/register.html', {"form": form})
-
-def compute_keyness(target_freq, reference_freq, target_size, reference_size):
-    """
-    Computes keyness scores and significance (p-values) for words in a target corpus.
-    
-    Parameters:
-    - target_freq (dict): Word frequencies in the target corpus {word: count}.
-    - reference_freq (dict): Word frequencies in the reference corpus {word: count}.
-    - target_size (int): Total word count in the target corpus.
-    - reference_size (int): Total word count in the reference corpus.
-    
-    Returns:
-    - DataFrame with columns: ['word', 'freq_target', 'freq_reference', 'keyness', 'p_value']
-    """
-    results = []
-
-    all_words = set(target_freq.keys()).union(reference_freq.keys())
-
-    for word in all_words:
-        O1 = target_freq.get(word, 0)  # Observed frequency in target
-        O2 = reference_freq.get(word, 0)  # Observed frequency in reference
-
-        # Expected frequencies based on corpus sizes
-        E1 = (O1 + O2) * (target_size / (target_size + reference_size))
-        E2 = (O1 + O2) * (reference_size / (target_size + reference_size))
-
-        # Compute each log-likelihood component separately
-        first_term = (O1 * np.log(O1 / E1)) if O1 > 0 else 0
-        second_term = (O2 * np.log(O2 / E2)) if O2 > 0 else 0
-        G = 2 * (first_term + second_term)
-
-        # Optionally, assign a sign based on whether the target frequency is higher or lower than expected.
-        # For example, use positive G if O1 >= E1, negative otherwise.
-        signed_G = G if O1 >= E1 else -G
-
-        # Compute p-value for significance (always uses the absolute G)
-        p_value = 1 - stats.chi2.cdf(abs(G), df=1)
-
-        results.append((word, O1, O2, signed_G, p_value))
-
-    # Convert to a DataFrame
-    df = pd.DataFrame(results, columns=['word', 'freq_target', 'freq_reference', 'keyness', 'p_value'])
-    df = df.sort_values(by='p_value', ascending=True)
-
-    return df
