@@ -52,6 +52,7 @@ def home_view(request):
 
 @login_required
 def analytics(request):
+    # target = request.GET.get('target', 'user') MAYBE USE LATER TO SELECT OTHER TARGET CORPORA
     compare_to = request.GET.get('compare_to', 'reference')
 
     target_frequencies = request.session.get('target_frequencies', {})
@@ -62,14 +63,9 @@ def analytics(request):
 
     target_frequencies, keyness_table = perform_analysis(compare_to, request, request.user)
 
-    # if target_frequencies and reference_frequencies:
-    #     keyness_df = compute_keyness(target_frequencies, reference_frequencies, target_size, reference_size)
-    #     keyness_table = keyness_df.to_html(index=False)
-    # else:
-    #     keyness_table = "<p>No data available to compute keyness.</p>"
-
     return render(request, 'home/analytics.html', {
         'compare_to': compare_to,
+        # 'target' : target
         'word_frequencies': target_frequencies,
         'keyness_table': keyness_table
     })

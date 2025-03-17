@@ -2,8 +2,23 @@
 
 {% block content %}
 <div class="container py-5">
-    <!-- Comparison Selector Section -->
+    <!-- Target / Reference Corpus Selector Section -->
     <div class="row mb-5">
+        <div class="col-md-6 mx-auto">
+            <div class="card shadow-sm border-0 rounded-lg">
+                <div class="card-body">
+                    <form method="GET" class="mb-0">
+                        <div class="form-group mb-0">
+                            <label for="compareTo" class="form-label fw-bold mb-2">Selected text:</label>
+                            <select class="form-select form-select-lg shadow-sm" id="compareTo" name="compare_to" onchange="this.form.submit()">
+                                <option value="most-recent" {% if target == 'most-recent' %}selected{% endif %}>My most recent reflection</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-6 mx-auto">
             <div class="card shadow-sm border-0 rounded-lg">
                 <div class="card-body">
@@ -11,8 +26,9 @@
                         <div class="form-group mb-0">
                             <label for="compareTo" class="form-label fw-bold mb-2">Comparing to:</label>
                             <select class="form-select form-select-lg shadow-sm" id="compareTo" name="compare_to" onchange="this.form.submit()">
-                                <option value="class" {% if compare_to == 'class' %}selected{% endif %}>👥 Users in my class</option>
+                                <option value="none-selected" {% if compare_to == '' %}selected{% endif %}>None selected</option>
                                 <option value="previous" {% if compare_to == 'previous' %}selected{% endif %}>📝 My previous reflections</option>
+                                <option value="class" {% if compare_to == 'class' %}selected{% endif %}>👥 Users in my class</option>
                                 <option value="all" {% if compare_to == 'all' %}selected{% endif %}>🌐 All users</option>
                                 <option value="michigan" {% if compare_to == 'michigan' %}selected{% endif %}>🎓 Michigan Engineering Corpus</option>
                             </select>
