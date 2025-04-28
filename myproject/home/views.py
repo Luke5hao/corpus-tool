@@ -9,6 +9,12 @@ import re
 from .text_processing import tokenize_and_clean
 from .text_processing import compute_keyness
 from .analysis import perform_analysis
+import pandas as pd
+from io import StringIO
+import logging
+
+# Logger for debugging
+logger = logging.getLogger(__name__) 
 
 @login_required
 def home_view(request):
@@ -62,6 +68,16 @@ def analytics(request):
     reference_size = request.session.get('reference_size', 0)
 
     target_frequencies, keyness_table = perform_analysis(compare_to, request, request.user)
+    # logger.debug("Done performing analysis")
+    if keyness_table != "<p>No data available to compute keyness.</p>":
+        # logger.debug("Entering keyness table processing block")
+        df = pd.read_html(StringIO(keyness_table))[0]
+        filtered_df = df[abs(df['keyness']) > 1] # Check with Cameron
+        keyness_table = filtered_df.to_html(
+            index=False,
+            classes=['table', 'table-hover', 'align-middle', 'mb-0'],
+            table_id='keyness-table'
+        )
 
     return render(request, 'home/analytics.html', {
         'compare_to': compare_to,

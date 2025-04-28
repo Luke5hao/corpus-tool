@@ -63,7 +63,11 @@ def perform_analysis(compare_to, request, user):
   # PROCESS TEXT
   if target_frequencies and reference_frequencies:
     keyness_df = compute_keyness(target_frequencies, reference_frequencies, target_size, reference_size)
-    keyness_table = keyness_df.to_html(index=False)
+    keyness_table = keyness_df.to_html(
+      index=False,
+      classes=['table', 'table-hover', 'align-middle', 'mb-0'],
+      table_id='keyness-table'
+    )
   else:
     keyness_table = "<p>No data available to compute keyness.</p>"
   

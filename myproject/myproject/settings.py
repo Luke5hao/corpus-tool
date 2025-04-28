@@ -133,3 +133,19 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'home.views': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}

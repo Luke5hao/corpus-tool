@@ -143,6 +143,34 @@ h1 {
     background-color: #ffffff;
 }
 
+/* .table-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+} */
+
+.keyness-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border:#0056b3 5px solid;
+}
+
+.keyness-table th, .keyness-table td {
+    text-align: center;  
+    padding: 10px;
+    border: 1px solid #ddd;
+    word-wrap: break-word;
+}
+
+.keyness-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
 .table {
     margin-bottom: 0;
     background-color: #ffffff;
