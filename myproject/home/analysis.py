@@ -2,6 +2,10 @@ from .models import TextEntry, UserProfile
 from .text_processing import tokenize_and_clean
 from .text_processing import compute_keyness
 from collections import Counter
+import logging
+
+# Logger for debugging
+logger = logging.getLogger(__name__) 
 
 def perform_analysis(compare_to, request, user):
   # RETRIEVE MOST-RECENT USER ENTRY AND CALCULATE TARGET STATS
@@ -63,11 +67,18 @@ def perform_analysis(compare_to, request, user):
   # PROCESS TEXT
   if target_frequencies and reference_frequencies:
     keyness_df = compute_keyness(target_frequencies, reference_frequencies, target_size, reference_size)
-    keyness_table = keyness_df.to_html(
-      index=False,
-      classes=['table', 'table-hover', 'align-middle', 'mb-0'],
-      table_id='keyness-table'
-    )
+    
+    user_submission_count = TextEntry.objects.filter(user=user).count()
+    # logger.debug(f"User submission count: {user_submission_count}")
+    if compare_to == 'class' and user_submission_count < 5:
+      # IF MODIFYING MESSAGE, ALSO MODIFY "catch_exceptions" CHECK IN VIEWS.PY
+      keyness_table = "<p>Class analytics avalable after 5+ submissions.</p>"
+    else:
+      keyness_table = keyness_df.to_html(
+        index=False,
+        classes=['table', 'table-hover', 'align-middle', 'mb-0'],
+        table_id='keyness-table'
+      )
   else:
     keyness_table = "<p>No data available to compute keyness.</p>"
   

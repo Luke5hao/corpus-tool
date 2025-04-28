@@ -147,5 +147,9 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
+        'home.analysis': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 }

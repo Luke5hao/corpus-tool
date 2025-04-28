@@ -69,7 +69,12 @@ def analytics(request):
 
     target_frequencies, keyness_table = perform_analysis(compare_to, request, request.user)
     # logger.debug("Done performing analysis")
-    if keyness_table != "<p>No data available to compute keyness.</p>":
+    catch_exceptions = {
+        "<p>No data available to compute keyness.</p>",
+        "<p>Class analytics avalable after 5+ submissions.</p>"
+    }
+
+    if keyness_table not in catch_exceptions:
         # logger.debug("Entering keyness table processing block")
         df = pd.read_html(StringIO(keyness_table))[0]
         filtered_df = df[abs(df['keyness']) > 1] # Check with Cameron
